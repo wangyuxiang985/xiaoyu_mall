@@ -4,12 +4,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 
+import com.wyx.yumall.member.feign.CouponServiceFeign;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wyx.yumall.member.entity.MemberEntity;
 import com.wyx.yumall.member.service.MemberService;
@@ -30,6 +27,17 @@ import com.wyx.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private CouponServiceFeign couponServiceFeign;
+
+    @GetMapping("/coupons")
+    public R listCoupons(){
+        MemberEntity member = new MemberEntity();
+        member.setNickname("小王");
+        R r = couponServiceFeign.memberCoupons();
+        return R.ok().put("member", member).put("coupons", r.get("coupons"));
+    }
 
     /**
      * 列表
