@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import com.wyx.yumall.coupon.entity.CouponEntity;
@@ -20,11 +22,20 @@ import com.wyx.common.utils.R;
  * @email wangyuxiang@gmail.com
  * @date 2021-12-09 23:24:22
  */
+@RefreshScope
 @RestController
 @RequestMapping("coupon/coupon")
 public class CouponController {
     @Autowired
     private CouponService couponService;
+
+    @Value("${coupon.test.name}")
+    private String couponTestName;
+
+    @GetMapping("/test/config")
+    public R testConfig(){
+        return R.ok().put("name", couponTestName);
+    }
 
     @GetMapping("/member/list")
     public R memberCoupons(){
